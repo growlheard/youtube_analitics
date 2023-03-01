@@ -19,14 +19,48 @@ class Youtube:
         self._channel_id = self.channel['items'][0]['id']  # id канала
         self.channel_title = self.channel['items'][0]['snippet']['title']  # название канала
         self.channel_description = self.channel['items'][0]['snippet']['description']  # описание канала
+        self.channel_url = 'https://www.youtube.com/channel/' + self.channel_id   # ссыдка на канал
         self.subscriber_count = int(self.channel['items'][0]['statistics']['subscriberCount'])  # количество подписчиков
         self.video_count = int(self.channel['items'][0]['statistics']['videoCount'])  # количество видео
         self.view_count = int(self.channel['items'][0]['statistics']['viewCount'])  # общее количество просмотров
 
     def print_info(self):
         """
-         Выводим информацию о канале на консоль
-         """
+        Выводим информацию о канале на консоль
+        """
         print(json.dumps(self.channel, indent=2, ensure_ascii=False))
+
+    @property
+    def channel_id(self) -> str:
+        """
+        Получение ссылки на канал
+        """
+        return self._channel_id
+
+    @staticmethod
+    def get_service():
+        """
+        возвращает объект для работы с API ютуба
+        """
+        api_key: str = os.environ.get('API_KEY')
+        return build('youtube', 'v3', developerKey=api_key)
+
+    def to_json(self, filename) -> None:
+        """
+        сохраняет информацию по каналу, хранящуюся в атрибутах экземпляра класса Youtube, в json-файл
+        """
+        with open(filename, "w", encoding='utf-8') as file:
+            json.dump({
+                "channel_id": self._channel_id,
+                "channel_title": self.channel_title,
+                "channel_description": self.channel_description,
+                "channel_link": self.channel_url,
+                "subscriber_count": self.subscriber_count,
+                "video_count": self.video_count,
+                "view_count": self.view_count
+            }, file, indent=2, ensure_ascii=False)
+
+
+
 
 
