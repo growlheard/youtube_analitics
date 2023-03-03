@@ -31,7 +31,7 @@ class Youtube:
         print(json.dumps(self.channel, indent=2, ensure_ascii=False))
 
     @property
-    def channel_id(self) -> str:
+    def channel_id(self):
         """
         Получение ссылки на канал
         """
@@ -60,7 +60,22 @@ class Youtube:
                 "view_count": self.view_count
             }, file, indent=2, ensure_ascii=False)
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self._channel_id}')"
 
+    def __str__(self):
+        return f'YouTube-канал: {self.channel_title}'
 
+    def __add__(self, other):
+        """
+        Сложение количества подписчиков каналов
+        """
+        if isinstance(other, Youtube):
+            return self.subscriber_count + other.subscriber_count
 
-
+    def __gt__(self, other):
+        """
+        Сравнивает количества подписчиков каналов
+        """
+        if isinstance(other, Youtube):
+            return self.subscriber_count > other.subscriber_count
