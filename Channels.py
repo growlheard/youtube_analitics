@@ -20,8 +20,7 @@ print(video2)
 pl = Playlist('PLguYHBi01DWr4bRWc4uaguASmo7lW4GCb')
 
 duration = pl.total_duration
-print(duration)
-print(type(duration))
-print(duration.total_seconds())
+print(pl.playlist_title)
 
-print(pl.show_best_video)
+print(pl.playlist_info)
+print(pl.video_ids)

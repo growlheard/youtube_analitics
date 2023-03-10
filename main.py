@@ -37,7 +37,7 @@ class Youtube(MixinSupport):
         self._channel_id = self.channel['items'][0]['id']  # id канала
         self.channel_title = self.channel['items'][0]['snippet']['title']  # название канала
         self.channel_description = self.channel['items'][0]['snippet']['description']  # описание канала
-        self.channel_url = f'https://www.youtube.com/channel/{self.channel_id}' # ссыдка на канал
+        self.channel_url = f'https://www.youtube.com/channel/{self.channel_id}'  # ссыдка на канал
         self.subscriber_count = int(self.channel['items'][0]['statistics']['subscriberCount'])  # количество подписчиков
         self.video_count = int(self.channel['items'][0]['statistics']['videoCount'])  # количество видео
         self.view_count = int(self.channel['items'][0]['statistics']['viewCount'])  # общее количество просмотров
@@ -153,7 +153,6 @@ class Playlist(MixinSupport):
         self._playlist_url = f"https://www.youtube.com/playlist?list={self.id_playlist}"
         self._playlist_videos = self.get_service().playlistItems().list(playlistId=self.id_playlist,
                                                                         part='contentDetails').execute()
-        self.playlist_video_info = json.dumps(self._playlist_videos, indent=4)
         self.video_ids: list[str] = [video['contentDetails']['videoId'] for video in self._playlist_videos['items']]
         self.video_response = self.get_service().videos().list(part='contentDetails,statistics',
                                                                id=','.join(self.video_ids)).execute()
@@ -194,6 +193,7 @@ class Playlist(MixinSupport):
             duration = isodate.parse_duration(iso_8601_duration)
         return duration
 
+    @property
     def show_best_video(self):
         """
         Самое поулярное видео(максимум лайков)
@@ -203,3 +203,4 @@ class Playlist(MixinSupport):
             videos[int(self.video_response['items'][i]['statistics']['likeCount'])] = self.video_ids[i]
 
         return f"https://www.youtube.com/watch?v={videos[max(videos)]}"
+
