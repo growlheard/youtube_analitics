@@ -163,7 +163,9 @@ class Playlist(MixinSupport):
 
     @property
     def playlist_title(self) -> str:
-        """Название плэйлиста"""
+        """
+        Название плэйлиста
+        """
         return self._playlist_title
 
     @property
