@@ -189,9 +189,9 @@ class Playlist(MixinSupport):
         duration = datetime.timedelta(0)
 
         for video in self.video_response['items']:
-            iso_duration = video['contentDetails']['duration']
-            duration += isodate.parse_duration(iso_duration)
-
+            # Длительности YouTube-видео представлены в ISO 8601 формате
+            iso_8601_duration = video['contentDetails']['duration']
+            duration = isodate.parse_duration(iso_8601_duration)
         return duration
 
     def show_best_video(self):
