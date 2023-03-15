@@ -95,11 +95,16 @@ class Video(MixinSupport):
     def __init__(self, video_id):
         super().__init__()
         self._video_id = video_id
-        youtube_service = Video.get_service()
-        self.video = youtube_service.videos().list(id=video_id, part='snippet,statistics').execute()
-        self.video_title = self.video['items'][0]['snippet']['title']
-        self.video_views = int(self.video['items'][0]['statistics']['viewCount'])
-        self.video_likes = int(self.video['items'][0]['statistics']['likeCount'])
+        try:
+            youtube_service = Video.get_service()
+            self.video = youtube_service.videos().list(id=video_id, part='snippet,statistics').execute()
+            self.video_title = self.video['items'][0]['snippet']['title']
+            self.video_views = int(self.video['items'][0]['statistics']['viewCount'])
+            self.video_likes = int(self.video['items'][0]['statistics']['likeCount'])
+        except IndexError:
+            self.video_title = None
+            self.video_views = None
+            self.video_likes = None
 
     @property
     def video_id(self):
@@ -203,4 +208,3 @@ class Playlist(MixinSupport):
             videos[int(self.video_response['items'][i]['statistics']['likeCount'])] = self.video_ids[i]
 
         return f"https://www.youtube.com/watch?v={videos[max(videos)]}"
-

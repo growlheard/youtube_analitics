@@ -24,3 +24,6 @@ print(pl.playlist_title)
 
 print(pl.playlist_info)
 print(pl.video_ids)
+broken_video = Video('broken_video_id')
+print(broken_video.video_title)
+print(broken_video.video_views)
